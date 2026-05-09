@@ -554,7 +554,7 @@ export function Packs() {
   };
 
   // Helper to handle scroll and update active dots
-  const handleScroll = (ref: React.RefObject<HTMLDivElement>, setIdx: (i: number) => void) => {
+  const handleScroll = (ref: React.RefObject<HTMLDivElement | null>, setIdx: (i: number) => void) => {
     if (!ref.current) return;
     const scrollLeft = ref.current.scrollLeft;
     const width      = ref.current.offsetWidth;
