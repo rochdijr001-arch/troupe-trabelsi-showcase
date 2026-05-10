@@ -15,19 +15,19 @@ export type Singer = {
 export const singers: Singer[] = [
   {
     id: 0,
-    name: "Trabelsi Wajdi",
+    name: "Wajdi Trabelssi",
     born: "Tunisie",
     origin: "Tunisie",
-    specialty: "Manager · Troupe Trabelsi & JoyBand",
-    styles: ["Management Artistique", "Organisation d'Événements", "Direction Artistique"],
-    experience: "+20 ans d'expertise",
+    specialty: "Direction Artistique & Management",
+    styles: ["Management d'Artistes", "Direction de Troupe", "Expertise Événementielle"],
+    experience: "+20 ans d'expérience",
     location: "Tunis · International",
     hit: "Manager de Prestige",
     images: ["/chanteur/Trabelsi Wajdi.jpeg"],
     bio: [
-      "Wajdi Trabelsi est le manager visionnaire derrière le succès de la Troupe Trabelsi et du JoyBand. Avec une expertise inégalée dans l'industrie musicale tunisienne, he coordonne les plus grands spectacles et gère les carrières des artistes les plus talentueux du pays.",
-      "Sa rigueur professionnelle et son sens de l'innovation ont permis à la Troupe Trabelsi de s'imposer comme la référence absolue des mariages de prestige et des événements d'envergure en Tunisie et à l'étranger.",
-      "Véritable chef d'orchestre de l'ombre, he veille à l'excellence de chaque prestation, garantissant une qualité artistique et une organisation irréprochable pour offrir au public des moments inoubliables.",
+      "Wajdi Trabelssi est un manager artistique, musicien professionnel et directeur de troupe reconnu en Tunisie, bénéficiant de plus de 20 ans d’expérience dans le domaine de la musique et de l’événementiel. Grâce à son parcours riche et à son expertise artistique, il s’est imposé comme une référence dans l’organisation et la direction de spectacles haut de gamme.",
+      "Directeur de la troupe « Trabelssi », il assure la gestion artistique et musicale de nombreuses prestations prestigieuses, alliant professionnalisme, créativité et excellence scénique. Musicien expérimenté et instrumentiste talentueux, Wajdi Trabelssi se distingue par sa maîtrise musicale, son sens du détail et sa capacité à offrir des performances de grande qualité adaptées à différents événements.",
+      "Au cours de sa carrière, il a collaboré à de nombreux mariages de prestige, festivals, soirées privées et événements artistiques majeurs, contribuant activement au rayonnement de la scène musicale tunisienne à travers des spectacles élégants, modernes et authentiques.",
     ],
   },
   {
@@ -57,7 +57,7 @@ export const singers: Singer[] = [
     experience: "+15 ans de carrière",
     location: "Tunisie · Festivals · Événements Culturels",
     hit: "Hadhra & Nouba",
-    images: ["/chanteur/Hayder Brahim.jpeg"],
+    images: ["/chanteur/Hayder-Brahim.jpeg"],
     bio: [
       "Hayder Brahim est un chanteur tunisien d'exception, reconnu pour sa voix puissante et sa présence charismatique sur la scène musicale nationale. Véritable ambassadeur de l'identité tunisienne, il se distingue par un style unique qui marie avec élégance la profondeur de la musique authentique aux sonorités de la variété moderne.",
       "Spécialiste de la Nouba tunisienne et de la Hadhra, Hayder Brahim excelle dans l'interprétation des chants spirituels et soufis. Son répertoire, riche et varié, valorise les rythmes traditionnels et le patrimoine andalou classique, tout en intégrant des instruments ancestraux au sein de performances dynamiques et contemporaines.",
