@@ -57,7 +57,7 @@ export const singers: Singer[] = [
     experience: "+15 ans de carrière",
     location: "Tunisie · Festivals · Événements Culturels",
     hit: "Hadhra & Nouba",
-    images: ["/chanteur/Hayder brahim.jpeg"],
+    images: ["/chanteur/Hayder Brahim.jpeg"],
     bio: [
       "Hayder Brahim est un chanteur tunisien d'exception, reconnu pour sa voix puissante et sa présence charismatique sur la scène musicale nationale. Véritable ambassadeur de l'identité tunisienne, il se distingue par un style unique qui marie avec élégance la profondeur de la musique authentique aux sonorités de la variété moderne.",
       "Spécialiste de la Nouba tunisienne et de la Hadhra, Hayder Brahim excelle dans l'interprétation des chants spirituels et soufis. Son répertoire, riche et varié, valorise les rythmes traditionnels et le patrimoine andalou classique, tout en intégrant des instruments ancestraux au sein de performances dynamiques et contemporaines.",
