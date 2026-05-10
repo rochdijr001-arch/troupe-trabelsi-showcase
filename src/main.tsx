@@ -1,11 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { StartClient } from "@tanstack/react-start";
+import { RouterProvider } from "@tanstack/react-router";
 import { getRouter } from "./router";
+import "./styles.css";
 
 const router = getRouter();
 const rootElement = document.getElementById("root");
 
 if (rootElement) {
   const root = createRoot(rootElement);
-  root.render(<StartClient router={router} />);
+  root.render(<RouterProvider router={router} />);
 }
