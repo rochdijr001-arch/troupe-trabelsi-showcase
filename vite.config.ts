@@ -13,4 +13,5 @@ export default defineConfig({
     server: { entry: "server" },
     deployment: "vercel",
   },
+  cloudflare: false,
 });
