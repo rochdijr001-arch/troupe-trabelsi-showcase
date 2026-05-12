@@ -115,24 +115,7 @@ export function Hero() {
       {/* ── Content ── */}
       <div className="relative z-10 container mx-auto px-6 text-center max-w-5xl">
 
-        {/* Badge */}
-        <div
-          className="hero-badge inline-flex items-center gap-2.5 px-5 py-2 rounded-full mb-10"
-          style={{
-            border: "1px solid rgba(212,175,55,0.40)",
-            background: "rgba(0,0,0,0.45)",
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <Star size={12} style={{ color: "#D4AF37", fill: "#D4AF37" }} />
-          <span
-            className="text-[11px] uppercase tracking-[0.34em] font-sans"
-            style={{ color: "rgba(212,175,55,0.85)" }}
-          >
-            Luxury Wedding &amp; Event Agency
-          </span>
-          <Star size={12} style={{ color: "#D4AF37", fill: "#D4AF37" }} />
-        </div>
+
 
         {/* Main title */}
         <h1

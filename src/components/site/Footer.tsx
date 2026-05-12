@@ -36,7 +36,7 @@ export function Footer() {
             Troupe Trabelsi
           </a>
           <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
-            © {new Date().getFullYear()} Troupe Trabelsi · Luxury Wedding Agency
+            © {new Date().getFullYear()} Troupe Trabelsi · Trabelsi Wedding planner
           </p>
           <div className="flex items-center gap-3">
             <SocialLink href="tel:+21624739679" icon={Phone} />

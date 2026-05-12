@@ -25,15 +25,34 @@ export function Singers() {
       <div className="absolute inset-0 bg-radial-gold opacity-30 pointer-events-none" />
       <div className="container mx-auto px-6 relative">
         
+        {/* ── MANAGER SECTION ── */}
+        <SectionHeader
+          eyebrow="Direction Artistique"
+          title={"<em class='italic text-gradient-gold'>Le Manager</em>"}
+          subtitle="Visionnaire et garant de l'excellence artistique de chaque prestation."
+        />
+        <div className="flex justify-center mb-24">
+          <div className="w-full max-w-[280px] sm:max-w-sm">
+            {singers.length > 0 && (
+              <SingerCard 
+                singer={singers[0]} 
+                index={0} 
+                onOpen={() => setActive(singers[0])} 
+              />
+            )}
+          </div>
+        </div>
+
         {/* ── TOP 5: NOTRE STARS ── */}
         <SectionHeader
           eyebrow="Notre Sélection"
           title={"<em class='italic text-gradient-gold'>Nos Stars</em> D'Exception"}
           subtitle="Un casting de légendes de la musique tunisienne — des voix qui ont conquis Tunis."
         />
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 max-w-[1100px] mx-auto mb-24">
-          {singers.slice(0, 6).map((singer, i) => (
-            <SingerCard key={singer.id} singer={singer} index={i} onOpen={() => setActive(singer)} />
+          {singers.slice(1, 7).map((singer, i) => (
+            <SingerCard key={singer.id} singer={singer} index={i + 1} onOpen={() => setActive(singer)} />
           ))}
         </div>
 
@@ -50,8 +69,8 @@ export function Singers() {
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto mb-24">
-          {singers.slice(6, -1).map((singer, i) => (
-            <SingerCard key={singer.id} singer={singer} index={i + 6} onOpen={() => setActive(singer)} />
+          {singers.slice(7, -1).map((singer, i) => (
+            <SingerCard key={singer.id} singer={singer} index={i + 7} onOpen={() => setActive(singer)} />
           ))}
         </div>
 

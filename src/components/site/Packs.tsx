@@ -580,10 +580,7 @@ export function Packs() {
 
         {/* ── Section heading ── */}
         <div className="text-center mb-14">
-          <span className="block text-[11px] uppercase tracking-[0.38em] mb-4 font-sans"
-            style={{ color: "rgba(212,175,55,0.60)" }}>
-            Choisissez votre Troupe · 2025
-          </span>
+
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mb-5 text-white">
             Une{" "}
             <em className="not-italic" style={{

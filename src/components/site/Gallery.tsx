@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { X, ZoomIn, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
-import { SectionHeader } from "./SectionHeader";
+
 
 /* ─────────────────────────────────────────────
    EVENT PHOTOS
@@ -9,38 +9,13 @@ import { SectionHeader } from "./SectionHeader";
 ───────────────────────────────────────────── */
 type GalleryImage = {
   src: string;
-  label: string;
   span?: "tall" | "wide" | "normal";
 };
-
-const LABELS = [
-  "Soirée de gala · Sidi Bou Saïd",
-  "Performance live · Hammamet",
-  "Mariage privé · La Marsa",
-  "Soirée d'entreprise · Carthage",
-  "Anniversaire de luxe · Sousse",
-  "Cérémonie orientale · Monastir",
-  "Show musical · Djerba",
-  "Gala de prestige · Gammarth",
-  "Mariage de rêve · Nabeul",
-  "Mariage oriental · Sfax",
-  "Performance scénique · Ariana",
-  "Soirée de prestige · Monastir",
-  "Soirée orientale · Sidi Bou Saïd",
-  "Gala de mariage · Gammarth",
-  "Hadhra · Tunis",
-  "Spectacle Nouba · Sousse",
-  "Intro violoniste · La Marsa",
-  "Dabka Souriya · Hammamet",
-  "Ziyara · Monastir",
-  "Grand orchestre · Sfax",
-];
 
 const SPANS: GalleryImage["span"][] = ["tall", "normal", "normal", "normal", "tall", "normal", "normal", "wide", "normal", "tall"];
 
 const galleryImages: GalleryImage[] = Array.from({ length: 77 }, (_, i) => ({
   src: `/photo/image${String(i + 1).padStart(5, "0")}.jpeg`,
-  label: LABELS[i % LABELS.length],
   span: SPANS[i % SPANS.length],
 }));
 
@@ -78,17 +53,12 @@ export function Gallery() {
       <div className="absolute inset-0 bg-radial-gold opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-6 relative">
-        <SectionHeader
-          eyebrow="Galerie & Shows"
-          title={"Des moments <em class='italic text-gradient-gold'>inoubliables</em>"}
-          subtitle="Un aperçu de nos plus belles créations — mariages, galas et soirées d'exception capturés dans toute leur splendeur."
-        />
+
 
         {/* ── Stats bar ── */}
-        <div className="flex flex-wrap justify-center gap-10 mb-16">
+        <div className="flex flex-wrap justify-center gap-14 mb-16">
           {[
-            { value: `${galleryImages.length}+`, label: "Photos d'événements" },
-            { value: "600+",                      label: "Soirées réalisées"   },
+            { value: "2000+",                      label: "Soirées réalisées"   },
             { value: "100%",                      label: "Clients satisfaits"  },
           ].map(s => (
             <div key={s.label} className="text-center">
@@ -154,13 +124,13 @@ function GalleryTile({
       onClick={onOpen}
       role="button"
       tabIndex={0}
-      aria-label={`Voir ${img.label} — photo ${idx + 1} sur ${total}`}
+      aria-label={`Voir photo ${idx + 1} sur ${total}`}
       onKeyDown={e => e.key === "Enter" && onOpen()}
       style={{ animationDelay: `${(idx % 8) * 0.06}s` }}
     >
       <img
         src={img.src}
-        alt={img.label}
+        alt={`Photo ${idx + 1}`}
         loading="lazy"
         className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
       />
@@ -181,10 +151,7 @@ function GalleryTile({
         </div>
       </div>
 
-      {/* Label at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-400">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-gold">{img.label}</p>
-      </div>
+
 
       {/* Index badge */}
       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -265,17 +232,14 @@ function Lightbox({
         <img
           key={index}
           src={images[index].src}
-          alt={images[index].label}
+          alt={`Photo ${index + 1}`}
           onLoad={() => setLoaded(true)}
           className="max-w-full max-h-full object-contain rounded-2xl border border-gold/25 shadow-gold"
           style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
         />
       </div>
 
-      {/* Label */}
-      <div className="relative z-10 text-center pb-4 shrink-0">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold/70">{images[index].label}</p>
-      </div>
+
 
       {/* Prev / Next */}
       <button

@@ -72,10 +72,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Troupe Trabelsi — Luxury Wedding & Music Agency" },
+      { title: "Troupe Trabelsi — Trabelsi Wedding planner" },
       { name: "description", content: "Troupe Trabelsi — La seule adresse pour que vos soirées de rêve deviennent réalité. Musiciens, chanteurs et wedding planners de luxe." },
       { name: "author", content: "Troupe Trabelsi" },
-      { property: "og:title", content: "Troupe Trabelsi — Luxury Wedding Agency" },
+      { property: "og:title", content: "Troupe Trabelsi — Trabelsi Wedding planner" },
       { property: "og:description", content: "Musiciens, chanteurs et wedding planners de luxe pour vos soirées de rêve." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
