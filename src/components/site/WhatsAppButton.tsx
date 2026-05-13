@@ -36,7 +36,7 @@ export function WhatsAppButton() {
 
   return (
     <div
-      className={`fixed bottom-8 right-8 z-[100] transition-all duration-700 ${
+      className={`fixed bottom-6 right-5 sm:bottom-8 sm:right-8 z-[100] transition-all duration-700 ${
         visible ? "scale-100 opacity-100" : "scale-0 opacity-0"
       }`}
     >
@@ -57,7 +57,7 @@ export function WhatsAppButton() {
         rel="noopener noreferrer"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-black border border-gold/40 transition-all duration-500 hover:scale-110 active:scale-90"
+        className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black border border-gold/40 transition-all duration-500 hover:scale-110 active:scale-90"
         style={{
           boxShadow: "0 0 20px rgba(212,175,55,0.15)",
         }}
@@ -70,24 +70,14 @@ export function WhatsAppButton() {
 
         {/* WhatsApp Icon (Lucide MessageCircle) styled as Gold */}
         <MessageCircle 
-          size={32} 
-          className="text-gold transition-transform duration-500 group-hover:rotate-12" 
+          size={28} 
+          className="text-gold transition-transform duration-500 group-hover:rotate-12 sm:[&]:w-8 sm:[&]:h-8" 
           strokeWidth={1.5}
         />
         
         {/* Inner shadow/glow for depth */}
         <div className="absolute inset-0 rounded-full shadow-[inset_0_0_12px_rgba(212,175,55,0.2)]" />
       </a>
-      
-      {/* Small mobile adjustment for padding */}
-      <style>{`
-        @media (max-width: 768px) {
-          .fixed.bottom-8.right-8 {
-            bottom: 30px;
-            right: 25px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

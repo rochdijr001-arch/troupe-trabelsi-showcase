@@ -2,7 +2,7 @@ import { Phone, Instagram, Mail, MapPin, Facebook } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer id="contact" className="relative pt-24 pb-10 border-t border-gold/20 overflow-hidden">
+    <footer id="contact" className="relative pt-16 sm:pt-24 pb-16 sm:pb-10 border-t border-gold/20 overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
       <div className="absolute inset-0 bg-radial-gold opacity-50 pointer-events-none" />
 
@@ -13,16 +13,16 @@ export function Footer() {
             <span className="text-xs uppercase tracking-[0.3em] text-gold">Contact</span>
             <span className="w-8 h-px bg-gold" />
           </div>
-          <h2 className="font-display text-4xl md:text-6xl mb-6">
+          <h2 className="font-display text-2xl sm:text-4xl md:text-6xl mb-6">
             Réservez votre{" "}
             <span className="italic text-gradient-gold">soirée d'exception</span>
           </h2>
-          <p className="text-foreground/70 text-lg">
+          <p className="text-foreground/70 text-sm sm:text-lg">
             Notre équipe vous répond personnellement sous 24h.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto mb-20">
           <ContactCard icon={Phone} title="Appelez-nous" lines={["+216 24 739 679", "+216 22 751 841"]} />
           <ContactCard icon={Instagram} title="Instagram" lines={["@troupetrabelsi"]} href="https://instagram.com/troupetrabelsi" />
           <ContactCard icon={Facebook} title="Facebook" lines={["Troupe Trabelsi"]} href="https://www.facebook.com/Trabelsiweddingplanner/" />

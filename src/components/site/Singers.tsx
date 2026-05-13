@@ -50,7 +50,7 @@ export function Singers() {
           subtitle="Un casting de légendes de la musique tunisienne — des voix qui ont conquis Tunis."
         />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 max-w-[1100px] mx-auto mb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-[1100px] mx-auto mb-24">
           {singers.slice(1, 7).map((singer, i) => (
             <SingerCard key={singer.id} singer={singer} index={i + 1} onOpen={() => setActive(singer)} />
           ))}
@@ -63,12 +63,12 @@ export function Singers() {
             <span className="text-xs uppercase tracking-[0.4em] text-gold/80">Découvrir plus</span>
             <span className="w-8 h-px bg-gold/50" />
           </div>
-          <h3 className="font-display text-4xl md:text-5xl text-gradient-gold mb-6 uppercase tracking-wider">Les Stars Tunisiennes</h3>
+          <h3 className="font-display text-2xl sm:text-4xl md:text-5xl text-gradient-gold mb-6 uppercase tracking-wider">Les Stars Tunisiennes</h3>
           <p className="text-[#F4F4F4]/50 max-w-2xl mx-auto text-sm leading-relaxed px-4">
             La richesse et la diversité de notre patrimoine musical, portée par les voix les plus emblématiques de la scène contemporaine.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto mb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto mb-24">
           {singers.slice(7, -1).map((singer, i) => (
             <SingerCard key={singer.id} singer={singer} index={i + 7} onOpen={() => setActive(singer)} />
           ))}
@@ -144,7 +144,7 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
+      className="fixed inset-0 z-[1100] flex items-center justify-center p-2 sm:p-4 md:p-8"
       style={{ transition: "opacity 320ms ease", opacity: visible ? 1 : 0 }}
       onClick={close}
     >
@@ -154,7 +154,7 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
       />
       <div
         onClick={e => e.stopPropagation()}
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl border border-gold/40 shadow-gold"
+        className="relative w-full max-w-5xl max-h-[95vh] sm:max-h-[92vh] overflow-y-auto rounded-2xl sm:rounded-3xl border border-gold/40 shadow-gold"
         style={{
           background: "linear-gradient(160deg, #111009 0%, #0a0a08 100%)",
           transition: "transform 320ms cubic-bezier(0.22,1,0.36,1), opacity 320ms ease",
@@ -165,15 +165,15 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
         {/* Close */}
         <button
           onClick={close}
-          className="absolute top-5 right-5 z-30 w-10 h-10 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
         >
           <X size={16} />
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[560px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-[560px]">
 
           {/* LEFT — Single photo, no arrows */}
-          <div className="relative overflow-hidden rounded-tl-3xl rounded-tr-3xl lg:rounded-tr-none lg:rounded-bl-3xl" style={{ minHeight: "400px" }}>
+          <div className="relative overflow-hidden rounded-tl-3xl rounded-tr-3xl lg:rounded-tr-none lg:rounded-bl-3xl" style={{ minHeight: "280px" }}>
             <img
               src={singer.images[0]}
               alt={singer.name}
@@ -181,17 +181,17 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a08]/60 hidden lg:block" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a08] via-[#0a0a08]/10 to-transparent lg:hidden" />
-            <div className="absolute top-5 left-5 flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/50 bg-[#0a0a0a]/70 backdrop-blur">
-              <Mic2 size={11} className="text-gold" />
-              <span className="text-[9px] uppercase tracking-[0.3em] text-gold">{singer.specialty}</span>
+            <div className="absolute top-3 left-3 sm:top-5 sm:left-5 flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gold/50 bg-[#0a0a0a]/70 backdrop-blur max-w-[calc(100%-60px)] sm:max-w-none">
+              <Mic2 size={11} className="text-gold shrink-0" />
+              <span className="text-[7px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-gold truncate">{singer.specialty}</span>
             </div>
           </div>
 
           {/* RIGHT — Bio */}
-          <div className="flex flex-col justify-between p-8 md:p-10 lg:p-12">
+          <div className="flex flex-col justify-between p-5 sm:p-8 md:p-10 lg:p-12">
             <div>
               <p className="text-[9px] uppercase tracking-[0.35em] text-gold mb-3">Artiste · Troupe Trabelsi</p>
-              <h2 className="font-display text-3xl md:text-5xl text-[#F4F4F4] leading-tight mb-2">{singer.name}</h2>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-5xl text-[#F4F4F4] leading-tight mb-2">{singer.name}</h2>
               <p className="text-[10px] text-gold/70 mb-4 italic">"{singer.hit}"</p>
               <div className="gold-divider w-20 mb-6" />
               <div className="flex flex-wrap gap-x-6 gap-y-2 mb-7">

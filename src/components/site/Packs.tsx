@@ -139,14 +139,14 @@ function SwitcherBtn({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative flex flex-col items-center gap-4 px-8 py-6 rounded-2xl transition-all duration-500 focus-visible:outline-none"
+      className="relative flex flex-col items-center gap-3 sm:gap-4 px-5 sm:px-8 py-4 sm:py-6 rounded-2xl transition-all duration-500 focus-visible:outline-none"
       style={{
         background: isActive
           ? "linear-gradient(160deg,rgba(212,175,55,0.12) 0%,rgba(212,175,55,0.04) 100%)"
           : "rgba(255,255,255,0.02)",
         border: `1px solid ${isActive ? GOLD : "rgba(212,175,55,0.18)"}`,
         boxShadow: isActive ? GOLD_GLOW : "none",
-        minWidth: "160px",
+        minWidth: "140px",
         cursor: "pointer",
       }}
     >
@@ -163,7 +163,7 @@ function SwitcherBtn({
         <img
           src={logoSrc}
           alt={label}
-          style={{ width: "72px", height: "72px", objectFit: "contain" }}
+          style={{ width: "56px", height: "56px", objectFit: "contain" }}
         />
       </div>
 
@@ -267,41 +267,48 @@ function GoldDivider({ label }: { label: string }) {
 /* ═══════════════════════════════════════════════════════════════
    VIDEO CARD
 ═══════════════════════════════════════════════════════════════ */
-function VideoCard({ video }: { video: VideoItem }) {
-  const [playing, setPlaying] = useState(false);
+function VideoCard({ video, isPlaying, onPlay, onStop }: { video: VideoItem; isPlaying: boolean; onPlay: () => void; onStop: () => void }) {
   const ref = useRef<HTMLVideoElement>(null);
+
+  // Sync play/pause with external isPlaying prop
+  useEffect(() => {
+    if (!ref.current || !video.src) return;
+    if (isPlaying) {
+      ref.current.play().catch(() => {});
+    } else {
+      ref.current.pause();
+    }
+  }, [isPlaying, video.src]);
 
   const toggle = () => {
     if (!video.src) return;
-    if (playing) {
-      ref.current?.pause();
-      setPlaying(false);
+    if (isPlaying) {
+      onStop();
     } else {
-      ref.current?.play();
-      setPlaying(true);
+      onPlay();
     }
   };
 
-  const handleEnded = () => setPlaying(false);
+  const handleEnded = () => onStop();
 
   return (
     <div
       className="group relative aspect-video rounded-xl overflow-hidden cursor-pointer select-none"
       style={{
-        border: `1px solid ${playing ? GOLD : "rgba(212,175,55,0.35)"}`,
-        boxShadow: playing ? "0 0 28px 6px rgba(212,175,55,0.30)" : "none",
+        border: `1px solid ${isPlaying ? GOLD : "rgba(212,175,55,0.35)"}`,
+        boxShadow: isPlaying ? "0 0 28px 6px rgba(212,175,55,0.30)" : "none",
         transition: "box-shadow 0.4s ease, border-color 0.4s ease",
         background: "#0a0a0a",
       }}
       onClick={toggle}
       onMouseEnter={(e) => {
-        if (!playing) {
+        if (!isPlaying) {
           (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 24px 4px rgba(212,175,55,0.28)";
           (e.currentTarget as HTMLDivElement).style.borderColor = GOLD;
         }
       }}
       onMouseLeave={(e) => {
-        if (!playing) {
+        if (!isPlaying) {
           (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
           (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(212,175,55,0.35)";
         }
@@ -323,7 +330,7 @@ function VideoCard({ video }: { video: VideoItem }) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: "linear-gradient(180deg,rgba(0,0,0,0.10) 0%,rgba(0,0,0,0.60) 100%)",
-          opacity: playing ? 0 : 1,
+          opacity: isPlaying ? 0 : 1,
           transition: "opacity 0.5s ease",
         }}
       />
@@ -332,9 +339,9 @@ function VideoCard({ video }: { video: VideoItem }) {
       <div
         className="absolute inset-0 flex flex-col items-center justify-center gap-3"
         style={{
-          opacity: playing ? 0 : 1,
+          opacity: isPlaying ? 0 : 1,
           transition: "opacity 0.3s ease",
-          pointerEvents: playing ? "none" : "auto",
+          pointerEvents: isPlaying ? "none" : "auto",
         }}
       >
         <div
@@ -356,7 +363,7 @@ function VideoCard({ video }: { video: VideoItem }) {
       </div>
 
       {/* Control bar while playing */}
-      {playing && (
+      {isPlaying && (
         <div
           className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-3 z-10"
           style={{ background: "linear-gradient(0deg,rgba(0,0,0,0.85) 0%,transparent 100%)" }}
@@ -491,7 +498,7 @@ function PackCard({ pack, brand }: { pack: Pack; brand: TabId }) {
           À partir de
         </span>
         <span
-          className="block font-display text-[2.4rem] font-bold leading-tight"
+          className="block font-display text-[1.8rem] sm:text-[2.4rem] font-bold leading-tight"
           style={{
             background: tk.grad, backgroundSize: "200% auto",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
@@ -530,6 +537,7 @@ export function Packs() {
   // States for mobile slider pagination
   const [packIdx, setPackIdx] = useState(0);
   const [vidIdx, setVidIdx]  = useState(0);
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
   
   const packSliderRef = useRef<HTMLDivElement>(null);
   const vidSliderRef  = useRef<HTMLDivElement>(null);
@@ -548,6 +556,7 @@ export function Packs() {
       // Reset sliders on tab change
       setPackIdx(0);
       setVidIdx(0);
+      setPlayingVideoId(null);
       if (packSliderRef.current) packSliderRef.current.scrollLeft = 0;
       if (vidSliderRef.current)  vidSliderRef.current.scrollLeft = 0;
     }, 380);
@@ -581,7 +590,7 @@ export function Packs() {
         {/* ── Section heading ── */}
         <div className="text-center mb-14">
 
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mb-5 text-white">
+          <h2 className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-white">
             Une{" "}
             <em className="not-italic" style={{
               background: GOLD_GRAD, backgroundSize: "200% auto",
@@ -686,7 +695,7 @@ export function Packs() {
 
           {/* Desktop Grid */}
           <div className="hidden md:grid grid-cols-2 gap-5 max-w-4xl mx-auto">
-            {videos.map((v) => <VideoCard key={v.id} video={v} />)}
+            {videos.map((v) => <VideoCard key={v.id} video={v} isPlaying={playingVideoId === v.id} onPlay={() => setPlayingVideoId(v.id)} onStop={() => setPlayingVideoId(null)} />)}
           </div>
 
           {/* Mobile "Peek-a-boo" Slider */}
@@ -703,7 +712,7 @@ export function Packs() {
                   className="min-w-[85vw] aspect-video snap-center transition-transform duration-500 active:scale-95"
                   style={{ transform: vidIdx === i ? "scale(1)" : "scale(0.95)" }}
                 >
-                  <VideoCard video={v} />
+                  <VideoCard video={v} isPlaying={playingVideoId === v.id} onPlay={() => setPlayingVideoId(v.id)} onStop={() => setPlayingVideoId(null)} />
                 </div>
               ))}
             </div>

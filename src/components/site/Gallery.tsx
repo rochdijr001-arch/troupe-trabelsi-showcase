@@ -83,12 +83,12 @@ export function Gallery() {
 
         {/* ── Bottom tag ── */}
         <div className="text-center mt-14">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-gold/30 bg-gold/5">
-            <ImageIcon size={13} className="text-gold" />
-            <span className="text-xs uppercase tracking-[0.3em] text-gold">
-              Galerie · Troupe Trabelsi — Tunisie & International
+          <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 rounded-full border border-gold/30 bg-gold/5">
+            <ImageIcon size={13} className="text-gold shrink-0" />
+            <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-gold">
+              Galerie · Troupe Trabelsi
             </span>
-            <ImageIcon size={13} className="text-gold" />
+            <ImageIcon size={13} className="text-gold shrink-0" />
           </div>
         </div>
       </div>
@@ -214,7 +214,7 @@ function Lightbox({
 
       {/* Image area */}
       <div
-        className="relative z-10 flex-1 flex items-center justify-center px-16 pb-6 min-h-0"
+        className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-16 pb-6 min-h-0"
         style={{
           transition: "transform 300ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease",
           transform: visible ? "scale(1)" : "scale(0.96)",
@@ -244,13 +244,13 @@ function Lightbox({
       {/* Prev / Next */}
       <button
         onClick={(e) => { e.stopPropagation(); onPrev(); }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
       >
         <ChevronLeft size={20} />
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
       >
         <ChevronRight size={20} />
       </button>

@@ -144,7 +144,7 @@ export function Hero() {
 
         {/* Subtitle */}
         <p
-          className="hero-sub font-sans text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mb-12 px-6 md:px-0"
+          className="hero-sub font-sans text-xs sm:text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mb-8 sm:mb-12 px-4 sm:px-6 md:px-0"
           style={{ color: "rgba(255,255,255,0.62)" }}
         >
           Troupe Trabelsi &amp; Joy Band — musiciens d'exception, spectacles
@@ -174,7 +174,7 @@ export function Hero() {
 
       {/* ── Scroll indicator ── */}
       <div
-        className="hero-scroll absolute bottom-10 left-1/2 z-10 flex flex-col items-center gap-2"
+        className="hero-scroll absolute bottom-6 sm:bottom-10 left-1/2 z-10 flex flex-col items-center gap-2 hidden sm:flex"
         style={{ transform: "translateX(-50%)" }}
       >
         <span
