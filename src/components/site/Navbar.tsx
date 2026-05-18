@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Sparkles, X } from "lucide-react";
 
 /* ─── Inject cinematic logo keyframes once ─────────────────────── */
 const LOGO_STYLE_ID = "logo-cinematic-styles";
@@ -87,14 +87,14 @@ function CinematicLogoText() {
   }, []);
 
   return (
-    <span className="logo-name hidden sm:inline-block">
+    <span className="logo-name hidden xl:inline-block">
       {BRAND_NAME.split("").map((char, i) => (
         <span
           key={i}
           className="logo-letter"
           style={{
             // stagger: 0.06s per letter, start at 0.10s
-            animationDelay: `${0.10 + i * 0.06}s`,
+            animationDelay: `${0.1 + i * 0.06}s`,
             // space character gets a fixed width
             ...(char === " " ? { width: "0.32em" } : {}),
           }}
@@ -109,14 +109,14 @@ function CinematicLogoText() {
 /* ─── Navbar logo ──────────────────────────────────────────────── */
 function NavLogo() {
   return (
-    <a href="#accueil" className="logo-wrapper gap-3 select-none">
+    <a href="/#accueil" className="logo-wrapper gap-3 select-none">
       {/* Brand image */}
       <img
         src="/trabelsilogo.png"
         alt="Troupe Trabelsi"
         style={{
           height: "44px",
-          width:  "44px",
+          width: "44px",
           objectFit: "contain",
           filter: "drop-shadow(0 0 8px rgba(212,175,55,0.70))",
           flexShrink: 0,
@@ -129,11 +129,12 @@ function NavLogo() {
 }
 
 const links = [
-  { href: "#accueil", label: "Accueil" },
-  { href: "#stars", label: "Nos Stars" },
-  { href: "#packs", label: "Packs" },
-  { href: "#galerie", label: "Galerie" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#accueil", label: "Accueil" },
+  { href: "/#stars", label: "Nos Stars" },
+  { href: "/#packs", label: "Packs" },
+  { href: "/wedding-planner", label: "Wedding Planner" },
+  { href: "/#galerie", label: "Galerie" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Navbar() {
@@ -174,30 +175,42 @@ export function Navbar() {
           : "bg-transparent py-6"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between relative">
-        
+      <div className="container mx-auto max-w-[1500px] px-6 lg:px-10 flex items-center justify-between relative gap-8">
         {/* Logo - Stays left on all screens for better stability */}
-        <div className="flex-shrink-0 z-[1001]">
+        <div className="flex-shrink-0 z-[1001] min-w-max">
           <NavLogo />
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 lg:gap-10">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-[11px] uppercase tracking-[0.25em] text-foreground/70 hover:text-gold transition-colors relative group font-sans font-bold"
-            >
-              {l.label}
-              <span className="absolute -bottom-2 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
+        <nav className="hidden lg:flex items-center justify-end gap-6 xl:gap-9 ml-10 flex-1">
+          {links.map((l) =>
+            l.href === "/wedding-planner" ? (
+              <a
+                key={l.href}
+                href={l.href}
+                className="relative overflow-hidden whitespace-nowrap rounded-full px-5 py-2 bg-gradient-to-r from-[#b8860b] via-[#f5d76e] to-[#b8860b] text-black font-bold tracking-[0.12em] text-xs uppercase shadow-[0_0_18px_rgba(212,175,55,0.35)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_28px_rgba(245,215,110,0.65)] before:content-[''] before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/50 before:to-transparent before:transition-transform before:duration-700 hover:before:translate-x-full"
+              >
+                <span className="relative z-10 flex items-center">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Wedding Planner
+                </span>
+              </a>
+            ) : (
+              <a
+                key={l.href}
+                href={l.href}
+                className="whitespace-nowrap text-[11px] uppercase tracking-[0.25em] text-foreground/70 hover:text-gold transition-colors relative group font-sans font-bold"
+              >
+                {l.label}
+                <span className="absolute -bottom-2 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
+              </a>
+            ),
+          )}
         </nav>
 
         {/* Hamburger - Always on top */}
         <button
-          className="md:hidden text-gold p-2 active:scale-90 transition-transform z-[1001] flex items-center justify-center"
+          className="lg:hidden text-gold p-2 active:scale-90 transition-transform z-[1001] flex items-center justify-center"
           onClick={() => setOpen(!open)}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
         >
@@ -206,44 +219,68 @@ export function Navbar() {
       </div>
 
       {/* Full-screen Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 w-full h-screen bg-[#050505] z-[999] transition-all duration-500 md:hidden flex flex-col items-center justify-center ${
+      <div
+        className={`fixed inset-0 w-full h-screen bg-[#050505] z-[999] transition-all duration-500 lg:hidden flex flex-col items-center justify-center ${
           open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         }`}
-        style={{ 
+        style={{
           backgroundColor: "#050505", // Solid fallback
-          backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)"
+          backgroundImage:
+            "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)",
         }}
       >
-        <nav className="flex flex-col items-center gap-8 text-center px-6">
-          {links.map((l, i) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="text-2xl sm:text-3xl font-display uppercase tracking-[0.30em] text-white/90 hover:text-gold active:scale-95 transition-all"
-              style={{ 
-                transitionDelay: open ? `${i * 70}ms` : "0ms",
-                opacity: open ? 1 : 0,
-                transform: open ? "translateY(0)" : "translateY(30px)"
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
-          
+        <nav className="flex w-full max-w-sm flex-col items-center gap-8 text-center px-6">
+          {links.map((l, i) =>
+            l.href === "/wedding-planner" ? (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="relative overflow-hidden whitespace-nowrap w-full rounded-full px-5 py-3 mt-3 bg-gradient-to-r from-[#b8860b] via-[#f5d76e] to-[#b8860b] bg-[length:200%_auto] animate-shimmer text-black font-bold uppercase tracking-[0.12em] shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 active:scale-95 before:content-[''] before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/50 before:to-transparent before:transition-transform before:duration-700 hover:before:translate-x-full"
+                style={{
+                  transitionDelay: open ? `${i * 70}ms` : "0ms",
+                  opacity: open ? 1 : 0,
+                }}
+              >
+                <span className="relative z-10 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Wedding Planner
+                </span>
+              </a>
+            ) : (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="text-2xl sm:text-3xl font-display uppercase tracking-[0.30em] text-white/90 hover:text-gold active:scale-95 transition-all"
+                style={{
+                  transitionDelay: open ? `${i * 70}ms` : "0ms",
+                  opacity: open ? 1 : 0,
+                  transform: open ? "translateY(0)" : "translateY(30px)",
+                }}
+              >
+                {l.label}
+              </a>
+            ),
+          )}
+
           <div className="h-px w-20 bg-gold/30 mt-6" />
-          
+
           <div className="flex flex-col items-center gap-3">
-             <span className="text-[10px] text-gold/60 uppercase tracking-[0.45em] font-sans">Troupe Trabelsi</span>
-             <div className="flex flex-col items-center gap-1">
-               <span className="text-[8px] text-white/30 uppercase tracking-[0.25em]">Tunisie · France · Dubai</span>
-               <span className="text-[8px] text-white/20 uppercase tracking-[0.25em]">2025 · 2026 Edition</span>
-             </div>
+            <span className="text-[10px] text-gold/60 uppercase tracking-[0.45em] font-sans">
+              Troupe Trabelsi
+            </span>
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-[8px] text-white/30 uppercase tracking-[0.25em]">
+                Tunisie · France · Dubai
+              </span>
+              <span className="text-[8px] text-white/20 uppercase tracking-[0.25em]">
+                2025 · 2026 Edition
+              </span>
+            </div>
           </div>
         </nav>
       </div>
     </header>
   );
 }
-

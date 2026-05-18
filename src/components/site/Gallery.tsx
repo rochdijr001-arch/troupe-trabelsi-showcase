@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { TouchEvent } from "react";
 import { X, ZoomIn, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 
 
@@ -177,44 +178,75 @@ function Lightbox({
 }) {
   const [visible, setVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   useEffect(() => { const t = setTimeout(() => setVisible(true), 10); return () => clearTimeout(t); }, []);
   useEffect(() => { setLoaded(false); }, [index]);
 
   const close = () => { setVisible(false); setTimeout(onClose, 300); };
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    touchStartX.current = touch?.clientX ?? null;
+    touchStartY.current = touch?.clientY ?? null;
+  };
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.changedTouches[0];
+
+    if (!touch || touchStartX.current === null || touchStartY.current === null) return;
+
+    const deltaX = touch.clientX - touchStartX.current;
+    const deltaY = touch.clientY - touchStartY.current;
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    if (Math.abs(deltaX) < 50 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) return;
+
+    if (deltaX < 0) {
+      onNext();
+    } else {
+      onPrev();
+    }
+  };
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex flex-col"
+      className="fixed inset-0 z-[5000] flex flex-col h-[100dvh]"
       style={{ transition: "opacity 300ms ease", opacity: visible ? 1 : 0 }}
+      onClick={close}
     >
       {/* Backdrop */}
       <div
         className="absolute inset-0"
         style={{ background: "rgba(4,4,4,0.96)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
-        onClick={close}
       />
 
+      <button
+        onClick={(e) => { e.stopPropagation(); close(); }}
+        aria-label="Fermer la galerie"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[5010] w-11 h-11 rounded-full border border-gold/40 bg-[#0a0a0a]/85 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+      >
+        <X size={18} />
+      </button>
+
       {/* Top bar */}
-      <div className="relative z-10 flex items-center justify-between px-6 py-5 shrink-0">
+      <div
+        className="relative z-[5005] flex items-center justify-between px-4 sm:px-6 pb-4 shrink-0 pr-20"
+        style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
+      >
         <div className="flex items-center gap-3">
           <ImageIcon size={14} className="text-gold" />
           <span className="text-xs uppercase tracking-[0.3em] text-gold">Troupe Trabelsi · Galerie</span>
         </div>
         <div className="flex items-center gap-5">
           <span className="text-xs tracking-widest text-foreground/40">{index + 1} / {images.length}</span>
-          <button
-            onClick={close}
-            className="w-10 h-10 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
-          >
-            <X size={16} />
-          </button>
         </div>
       </div>
 
       {/* Image area */}
       <div
-        className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-16 pb-6 min-h-0"
+        className="relative z-[5005] flex-1 flex items-center justify-center px-4 sm:px-16 pb-6 min-h-0"
         style={{
           transition: "transform 300ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease",
           transform: visible ? "scale(1)" : "scale(0.96)",
@@ -229,14 +261,22 @@ function Lightbox({
             />
           </div>
         )}
-        <img
-          key={index}
-          src={images[index].src}
-          alt={`Photo ${index + 1}`}
-          onLoad={() => setLoaded(true)}
-          className="max-w-full max-h-full object-contain rounded-2xl border border-gold/25 shadow-gold"
-          style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
-        />
+        <div
+          className="relative flex max-w-full max-h-[78dvh] md:max-h-[84dvh] items-center justify-center"
+          onClick={(e) => e.stopPropagation()}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <img
+            key={index}
+            src={images[index].src}
+            alt={`Photo ${index + 1}`}
+            onLoad={() => setLoaded(true)}
+            className="max-w-full max-h-[78dvh] md:max-h-[84dvh] object-contain rounded-2xl border border-gold/25 shadow-gold select-none"
+            style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
+            draggable={false}
+          />
+        </div>
       </div>
 
 
@@ -244,13 +284,13 @@ function Lightbox({
       {/* Prev / Next */}
       <button
         onClick={(e) => { e.stopPropagation(); onPrev(); }}
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[5010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
       >
         <ChevronLeft size={20} />
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[5010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
       >
         <ChevronRight size={20} />
       </button>
