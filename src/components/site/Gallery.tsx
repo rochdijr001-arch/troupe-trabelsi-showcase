@@ -20,16 +20,33 @@ const galleryImages: GalleryImage[] = Array.from({ length: 77 }, (_, i) => ({
   span: SPANS[i % SPANS.length],
 }));
 
+const INITIAL_VISIBLE_IMAGES = 16;
+const LOAD_MORE_IMAGES = 12;
+
 /* ─────────────────────────────────────────────
    MAIN SECTION
 ───────────────────────────────────────────── */
 export function Gallery() {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_IMAGES);
+  const visibleImages = galleryImages.slice(0, visibleCount);
+  const hasMoreImages = visibleCount < galleryImages.length;
 
   const openLightbox = (idx: number) => setLightboxIdx(idx);
-  const closeLightbox = () => setLightboxIdx(null);
-  const goNext = useCallback(() => setLightboxIdx(i => i === null ? null : (i + 1) % galleryImages.length), []);
-  const goPrev = useCallback(() => setLightboxIdx(i => i === null ? null : (i - 1 + galleryImages.length) % galleryImages.length), []);
+  const closeLightbox = useCallback(() => setLightboxIdx(null), []);
+  const showMoreImages = () =>
+    setVisibleCount((count) => Math.min(count + LOAD_MORE_IMAGES, galleryImages.length));
+  const goNext = useCallback(
+    () => setLightboxIdx((i) => (i === null ? null : (i + 1) % visibleImages.length)),
+    [visibleImages.length],
+  );
+  const goPrev = useCallback(
+    () =>
+      setLightboxIdx((i) =>
+        i === null ? null : (i - 1 + visibleImages.length) % visibleImages.length,
+      ),
+    [visibleImages.length],
+  );
 
   useEffect(() => {
     if (lightboxIdx === null) return;
@@ -40,7 +57,7 @@ export function Gallery() {
     };
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
-  }, [lightboxIdx, goNext, goPrev]);
+  }, [lightboxIdx, closeLightbox, goNext, goPrev]);
 
   useEffect(() => {
     if (lightboxIdx !== null) {
@@ -71,16 +88,29 @@ export function Gallery() {
 
         {/* ── Masonry Grid ── */}
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-          {galleryImages.map((img, idx) => (
+          {visibleImages.map((img, idx) => (
             <GalleryTile
               key={img.src}
               img={img}
               idx={idx}
-              total={galleryImages.length}
+              total={visibleImages.length}
               onOpen={() => openLightbox(idx)}
             />
           ))}
         </div>
+
+        {hasMoreImages && (
+          <div className="mt-12 text-center">
+            <button
+              type="button"
+              onClick={showMoreImages}
+              className="inline-flex items-center justify-center gap-3 rounded-full border border-gold/45 bg-black/50 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.24em] text-gold shadow-gold transition-all duration-300 ease-out hover:-translate-y-1 hover:border-gold hover:bg-gold/10 active:scale-95"
+            >
+              Voir plus de photos
+              <ImageIcon size={14} />
+            </button>
+          </div>
+        )}
 
         {/* ── Bottom tag ── */}
         <div className="text-center mt-14">
@@ -97,7 +127,7 @@ export function Gallery() {
       {/* ── Lightbox ── */}
       {lightboxIdx !== null && (
         <Lightbox
-          images={galleryImages}
+          images={visibleImages}
           index={lightboxIdx}
           onClose={closeLightbox}
           onNext={goNext}
@@ -133,21 +163,22 @@ function GalleryTile({
         src={img.src}
         alt={`Photo ${idx + 1}`}
         loading="lazy"
-        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+        decoding="async"
+        className="w-full h-auto object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
       />
 
       {/* Gold overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/85 via-[#0a0a0a]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/85 via-[#0a0a0a]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out" />
 
       {/* Gold border glow on hover */}
       <div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out pointer-events-none"
         style={{ boxShadow: "inset 0 0 0 1.5px #D4AF37" }}
       />
 
       {/* Centre icon */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-400">
-        <div className="w-12 h-12 rounded-full border-2 border-gold/70 bg-[#0a0a0a]/60 backdrop-blur flex items-center justify-center group-hover:scale-110 transition-transform duration-400">
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+        <div className="w-12 h-12 rounded-full border-2 border-gold/70 bg-[#0a0a0a]/60 backdrop-blur flex items-center justify-center transition-transform duration-300 ease-out group-hover:scale-110">
           <ZoomIn size={18} className="text-gold" />
         </div>
       </div>
@@ -212,27 +243,26 @@ function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-[5000] flex flex-col h-[100dvh]"
-      style={{ transition: "opacity 300ms ease", opacity: visible ? 1 : 0 }}
+      className="fixed inset-0 z-[9999] flex h-[100dvh] flex-col transition-opacity duration-300 ease-out"
+      style={{ opacity: visible ? 1 : 0 }}
       onClick={close}
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0"
-        style={{ background: "rgba(4,4,4,0.96)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
+        className="absolute inset-0 bg-[rgba(4,4,4,0.96)] backdrop-blur-md md:backdrop-blur-2xl"
       />
 
       <button
         onClick={(e) => { e.stopPropagation(); close(); }}
         aria-label="Fermer la galerie"
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[5010] w-11 h-11 rounded-full border border-gold/40 bg-[#0a0a0a]/85 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[10010] w-11 h-11 rounded-full border border-gold/40 bg-[#0a0a0a]/85 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300 ease-out"
       >
         <X size={18} />
       </button>
 
       {/* Top bar */}
       <div
-        className="relative z-[5005] flex items-center justify-between px-4 sm:px-6 pb-4 shrink-0 pr-20"
+        className="relative z-[10000] flex items-center justify-between px-4 sm:px-6 pb-4 shrink-0 pr-20"
         style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
       >
         <div className="flex items-center gap-3">
@@ -246,7 +276,7 @@ function Lightbox({
 
       {/* Image area */}
       <div
-        className="relative z-[5005] flex-1 flex items-center justify-center px-4 sm:px-16 pb-6 min-h-0"
+        className="relative z-[10000] flex-1 flex items-center justify-center px-4 sm:px-16 pb-6 min-h-0"
         style={{
           transition: "transform 300ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease",
           transform: visible ? "scale(1)" : "scale(0.96)",
@@ -272,6 +302,7 @@ function Lightbox({
             src={images[index].src}
             alt={`Photo ${index + 1}`}
             onLoad={() => setLoaded(true)}
+            decoding="async"
             className="max-w-full max-h-[78dvh] md:max-h-[84dvh] object-contain rounded-2xl border border-gold/25 shadow-gold select-none"
             style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
             draggable={false}
@@ -284,13 +315,13 @@ function Lightbox({
       {/* Prev / Next */}
       <button
         onClick={(e) => { e.stopPropagation(); onPrev(); }}
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[5010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[10010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300 ease-out"
       >
         <ChevronLeft size={20} />
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[5010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[10010] w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold/40 bg-[#0a0a0a]/80 flex items-center justify-center text-gold hover:bg-gradient-gold hover:text-[#0a0a0a] hover:border-transparent transition-all duration-300 ease-out"
       >
         <ChevronRight size={20} />
       </button>

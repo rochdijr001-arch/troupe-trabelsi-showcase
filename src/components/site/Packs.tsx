@@ -163,6 +163,8 @@ function SwitcherBtn({
         <img
           src={logoSrc}
           alt={label}
+          loading="lazy"
+          decoding="async"
           style={{ width: "56px", height: "56px", objectFit: "contain" }}
         />
       </div>
@@ -229,6 +231,8 @@ function SectionLogo({ brand, visible }: { brand: TabId; visible: boolean }) {
       <img
         src={src}
         alt={label}
+        loading="lazy"
+        decoding="async"
         style={{
           height: "110px",
           objectFit: "contain",
@@ -320,6 +324,7 @@ function VideoCard({ video, isPlaying, onPlay, onStop }: { video: VideoItem; isP
           ref={ref}
           src={video.src}
           preload="metadata"
+          playsInline
           onEnded={handleEnded}
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -442,6 +447,8 @@ function PackCard({ pack, brand }: { pack: Pack; brand: TabId }) {
           src={isJoy ? "/joybandlogo.png" : "/trabelsilogo.png"}
           alt=""
           aria-hidden
+          loading="lazy"
+          decoding="async"
           className="absolute -right-2 -top-2 w-20 h-20 object-contain pointer-events-none select-none"
           style={{ opacity: 0.09, filter: "drop-shadow(0 0 6px #D4AF37)" }}
         />

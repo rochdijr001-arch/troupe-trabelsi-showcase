@@ -114,6 +114,7 @@ function NavLogo() {
       <img
         src="/trabelsilogo.png"
         alt="Troupe Trabelsi"
+        decoding="async"
         style={{
           height: "44px",
           width: "44px",
@@ -171,7 +172,7 @@ export function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 w-full transition-all duration-500 z-[1000] ${
         scrolled || open
-          ? "bg-[#050505]/95 backdrop-blur-xl border-b border-gold/20 py-3"
+          ? "bg-[#050505]/95 backdrop-blur-md md:backdrop-blur-xl border-b border-gold/20 py-3"
           : "bg-transparent py-6"
       }`}
     >
@@ -220,7 +221,7 @@ export function Navbar() {
 
       {/* Full-screen Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 w-full h-screen bg-[#050505] z-[999] transition-all duration-500 lg:hidden flex flex-col items-center justify-center ${
+        className={`fixed inset-0 w-full h-[100dvh] bg-[#050505] z-[999] transition-[opacity,transform] duration-300 ease-out lg:hidden flex flex-col items-center justify-center ${
           open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
         }`}
         style={{
@@ -240,6 +241,7 @@ export function Navbar() {
                 style={{
                   transitionDelay: open ? `${i * 70}ms` : "0ms",
                   opacity: open ? 1 : 0,
+                  transform: open ? "translateY(0)" : "translateY(24px)",
                 }}
               >
                 <span className="relative z-10 flex items-center justify-center">

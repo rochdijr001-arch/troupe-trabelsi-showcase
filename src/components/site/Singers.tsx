@@ -106,7 +106,8 @@ function SingerCard({ singer, index, onOpen }: { singer: Singer; index: number; 
           src={singer.images[0]}
           alt={singer.name}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          decoding="async"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
       </div>
@@ -149,8 +150,7 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
       onClick={close}
     >
       <div
-        className="absolute inset-0"
-        style={{ background: "rgba(4,4,4,0.90)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+        className="absolute inset-0 bg-[rgba(4,4,4,0.90)] backdrop-blur-md md:backdrop-blur-xl"
       />
       <div
         onClick={e => e.stopPropagation()}
@@ -177,6 +177,8 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
             <img
               src={singer.images[0]}
               alt={singer.name}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a08]/60 hidden lg:block" />

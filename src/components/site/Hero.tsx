@@ -87,7 +87,7 @@ export function Hero() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         className="absolute inset-0 w-full h-full pointer-events-none select-none"
         style={{ objectFit: "cover" }}
       >
