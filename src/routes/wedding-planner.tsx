@@ -3,18 +3,12 @@ import type { TouchEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
-  CakeSlice,
-  Car,
   ChevronLeft,
   ChevronRight,
-  Flower2,
-  GlassWater,
   MessageCircle,
-  PartyPopper,
   Sparkles,
   X,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 import { Footer } from "@/components/site/Footer";
 import { Navbar } from "@/components/site/Navbar";
@@ -25,7 +19,6 @@ const WHATSAPP_URL =
 type Service = {
   title: string;
   description: string;
-  icon: LucideIcon;
   cardImage: string;
   images: string[];
 };
@@ -75,39 +68,31 @@ const soireePriveeEtCeremonieImages = makeWeddingPlannerImages(
 const services: Service[] = [
   {
     title: "Voiture de luxe",
-    description:
-      "Voiture de luxe au choix avec chauffeur pour une arrivée élégante lors de vos mariages, fiançailles et cérémonies.",
-    icon: Car,
+    description: "Voiture de luxe au choix avec chauffeur.",
     cardImage: voitureImages[0],
     images: voitureImages,
   },
   {
     title: "Décoration mariage",
-    description: "Décoration florale, tables, lumières, entrée des mariés et ambiance sur mesure.",
-    icon: Flower2,
+    description: "Décoration florale, lumières et ambiance sur mesure.",
     cardImage: decorationImages[0],
     images: decorationImages,
   },
   {
     title: "Wedding dessert",
-    description: "Buffet traiteur élégant : gâteaux, mini douceurs et présentation premium.",
-    icon: CakeSlice,
+    description: "Buffet dessert élégant et présentation premium.",
     cardImage: dessertImages[0],
     images: dessertImages,
   },
   {
     title: "Salé, jus & sucré",
-    description:
-      "Service complet pour vos invités : salé, jus frais, sucré et présentation raffinée.",
-    icon: GlassWater,
+    description: "Salé, jus frais, sucré et service raffiné.",
     cardImage: saleJusSucreImages[0],
     images: saleJusSucreImages,
   },
   {
-    title: "Soiree privee et ceremonie",
-    description:
-      "Organisation complète pour anniversaires, soirées familiales, VIP events, événements privés et cérémonies élégantes.",
-    icon: PartyPopper,
+    title: "Soirée privée et cérémonie",
+    description: "Organisation complète pour vos événements privés.",
     cardImage: soireePriveeEtCeremonieImages[0],
     images: soireePriveeEtCeremonieImages,
   },
@@ -248,28 +233,20 @@ function ServicesSection() {
   }, [selectedService]);
 
   return (
-    <section id="services" className="relative overflow-hidden py-24 md:py-32">
-      <div className="absolute inset-0 bg-radial-gold opacity-30" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+    <section id="services" className="relative overflow-hidden py-20 md:py-28">
+      <div className="absolute inset-0 bg-radial-gold opacity-20" />
 
       <div className="container relative z-10 mx-auto px-6">
-        <div className="mx-auto mb-16 max-w-3xl text-center">
-          <div className="mb-5 inline-flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" />
-            <span className="text-xs uppercase tracking-[0.3em] text-gold">
-              Nos Services Premium
-            </span>
-            <span className="h-px w-8 bg-gold" />
-          </div>
-          <h2 className="font-display text-3xl leading-tight text-white sm:text-5xl md:text-6xl">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.34em] text-gold">
+            Wedding Planner
+          </p>
+          <h2 className="font-display text-3xl leading-tight text-white sm:text-5xl">
             L'univers <span className="text-gradient-gold">Trabelsi Wedding Planner</span>
           </h2>
-          <p className="mt-6 text-sm leading-8 text-foreground/64 sm:text-lg">
-            Chaque détail est pensé pour créer une expérience élégante, raffinée et inoubliable.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[minmax(380px,auto)]">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-6">
           {services.map((service, index) => (
             <ServiceCard
               key={service.title}
@@ -278,15 +255,6 @@ function ServicesSection() {
               onOpen={() => openServiceGallery(service)}
             />
           ))}
-        </div>
-
-        <div className="mx-auto mt-16 max-w-4xl text-center">
-          <div className="gold-divider mb-8" />
-          <p className="text-sm leading-8 text-foreground/62 sm:text-base">
-            Troupe Trabelsi propose un service Wedding planner Tunisie avec une présence forte à
-            Monastir : décoration mariage Tunisie, voiture de luxe mariage, coordination de
-            cérémonie et soirée privée Tunisie pour des événements premium.
-          </p>
         </div>
       </div>
 
@@ -312,16 +280,15 @@ function ServiceCard({
   index: number;
   onOpen: () => void;
 }) {
-  const Icon = service.icon;
   const isFeatured = service.title === "Décoration mariage";
 
   return (
     <article
       className={[
-        "group relative flex min-h-[380px] cursor-pointer overflow-hidden rounded-3xl border border-gold/25 bg-[linear-gradient(135deg,rgba(17,14,8,0.98),rgba(0,0,0,0.96))] shadow-card transition-all duration-700 ease-out focus:outline-none focus:ring-2 focus:ring-gold/70 focus:ring-offset-2 focus:ring-offset-background",
-        "hover:-translate-y-2 hover:border-gold/80 hover:shadow-[0_30px_90px_-28px_rgba(212,175,55,0.65)]",
-        "md:min-h-[400px]",
-        isFeatured ? "lg:col-span-2 lg:min-h-[460px]" : "lg:min-h-[390px]",
+        "group relative flex min-h-[420px] cursor-pointer overflow-hidden rounded-3xl border border-gold/20 bg-black shadow-[0_18px_60px_-46px_rgba(0,0,0,0.95)] transition-all duration-500 ease-out focus:outline-none focus:ring-2 focus:ring-gold/70 focus:ring-offset-2 focus:ring-offset-background",
+        "hover:-translate-y-1 hover:border-gold/65 hover:shadow-[0_26px_80px_-54px_rgba(212,175,55,0.48)]",
+        "md:min-h-[460px]",
+        isFeatured ? "lg:col-span-4 lg:min-h-[500px]" : "lg:col-span-2 lg:min-h-[500px]",
       ].join(" ")}
       style={{ animationDelay: `${index * 0.08}s` }}
       role="button"
@@ -341,37 +308,17 @@ function ServiceCard({
         alt={service.title}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/58 to-black/8" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(212,175,55,0.22),transparent_28%),radial-gradient(circle_at_85%_15%,rgba(255,255,255,0.08),transparent_24%)] opacity-80" />
-      <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-        <div className="absolute -left-1/2 top-0 h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/18 to-transparent transition-transform duration-1000 group-hover:translate-x-[260%]" />
-      </div>
-      <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent opacity-70" />
-      <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-gold/15 blur-3xl transition-opacity duration-700 group-hover:opacity-100" />
+      <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-black/88 via-black/34 to-transparent" />
 
-      <div className="relative z-10 flex min-h-full w-full flex-col justify-between p-6 sm:p-8">
-        <div className="flex items-start justify-between gap-5">
-          <div className="inline-flex items-center gap-3 rounded-full border border-gold/35 bg-black/45 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-gold backdrop-blur-md">
-            <Sparkles size={12} />
-            Service Premium
-          </div>
-          <span className="font-display text-5xl leading-none text-white/20 transition-colors duration-500 group-hover:text-gold/45">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-        </div>
-
-        <div className="max-w-xl">
-          <div className="mb-5 flex items-center gap-4">
-            <span className="h-px w-14 bg-gradient-to-r from-gold to-transparent" />
-            <Icon size={20} className="text-gold" strokeWidth={1.5} />
-          </div>
-          <h3 className="font-display text-3xl leading-tight text-white transition-colors duration-500 group-hover:text-gold sm:text-4xl">
+      <div className="relative z-10 flex min-h-full w-full items-end p-5 sm:p-7">
+        <div className="max-w-lg">
+          <h3 className="font-display text-2xl leading-tight text-white transition-colors duration-500 group-hover:text-gold sm:text-3xl">
             {service.title}
           </h3>
-          <p className="mt-4 max-w-lg text-sm leading-7 text-white/72 sm:text-base">
+          <p className="mt-2 max-w-md text-sm leading-6 text-white/70 transition-all duration-500 group-hover:translate-y-[-2px] group-hover:text-white/90">
             {service.description}
           </p>
-          <span className="mt-7 inline-flex items-center text-[11px] font-bold uppercase tracking-[0.24em] text-gold transition-all duration-500 group-hover:text-gold-soft">
+          <span className="mt-5 inline-flex min-h-11 items-center text-[10px] font-bold uppercase tracking-[0.24em] text-gold transition-colors duration-500 group-hover:text-gold-soft sm:text-[11px]">
             Voir les photos
             <ArrowRight
               size={15}
@@ -407,7 +354,7 @@ function ServiceCardBackground({
     <img
       src={currentSrc}
       alt={alt}
-      className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-[1600ms] ease-out group-hover:scale-110"
+      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1800ms] ease-out group-hover:scale-105"
       loading="lazy"
       decoding="async"
       onError={() => {
