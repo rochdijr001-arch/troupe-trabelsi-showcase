@@ -101,12 +101,10 @@ function SingerCard({ singer, index, onOpen }: { singer: Singer; index: number; 
       style={{ animationDelay: `${index * 0.08}s` }}
       onClick={onOpen}
     >
-      <div className="aspect-[3/4] overflow-hidden">
-        <img
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#080704]">
+        <StableSingerImage
           src={singer.images[0]}
           alt={singer.name}
-          loading="lazy"
-          decoding="async"
           className="w-full h-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
@@ -174,11 +172,9 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
 
           {/* LEFT — Single photo, no arrows */}
           <div className="relative overflow-hidden rounded-tl-3xl rounded-tr-3xl lg:rounded-tr-none lg:rounded-bl-3xl" style={{ minHeight: "280px" }}>
-            <img
+            <StableSingerImage
               src={singer.images[0]}
               alt={singer.name}
-              loading="lazy"
-              decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a08]/60 hidden lg:block" />
@@ -226,5 +222,46 @@ function SingerModal({ singer, onClose }: { singer: Singer; onClose: () => void 
         </div>
       </div>
     </div>
+  );
+}
+
+function StableSingerImage({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className: string;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <>
+      {!loaded && (
+        <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,0,0,0.08),rgba(212,175,55,0.04))]" />
+      )}
+
+      {hasError ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#080704] text-[10px] font-bold uppercase tracking-[0.24em] text-gold/70">
+          Photo
+        </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setHasError(true);
+            setLoaded(true);
+          }}
+          className={className}
+          style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
+        />
+      )}
+    </>
   );
 }

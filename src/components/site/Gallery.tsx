@@ -152,6 +152,11 @@ function GalleryTile({
   total: number;
   onOpen: () => void;
 }) {
+  const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const aspectClass =
+    img.span === "wide" ? "aspect-[4/3]" : img.span === "tall" ? "aspect-[3/4]" : "aspect-[4/5]";
+
   return (
     <div
       className="break-inside-avoid mb-4 group relative rounded-2xl overflow-hidden border border-gold/20 cursor-pointer hover-lift"
@@ -162,13 +167,31 @@ function GalleryTile({
       onKeyDown={e => e.key === "Enter" && onOpen()}
       style={{ animationDelay: `${(idx % 8) * 0.06}s` }}
     >
-      <img
-        src={img.src}
-        alt={`Photo ${idx + 1}`}
-        loading="lazy"
-        decoding="async"
-        className="w-full h-auto object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
-      />
+      <div className={`relative overflow-hidden bg-[#080704] ${aspectClass}`}>
+        {!loaded && (
+          <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,0,0,0.08),rgba(212,175,55,0.04))]" />
+        )}
+
+        {hasError ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#080704] text-[10px] font-bold uppercase tracking-[0.24em] text-gold/70">
+            Photo
+          </div>
+        ) : (
+          <img
+            src={img.src}
+            alt={`Photo ${idx + 1}`}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={() => {
+              setHasError(true);
+              setLoaded(true);
+            }}
+            className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
+            style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
+          />
+        )}
+      </div>
 
       {/* Gold overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/85 via-[#0a0a0a]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out" />
@@ -212,11 +235,15 @@ function Lightbox({
 }) {
   const [visible, setVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   useEffect(() => { const t = setTimeout(() => setVisible(true), 10); return () => clearTimeout(t); }, []);
-  useEffect(() => { setLoaded(false); }, [index]);
+  useEffect(() => {
+    setLoaded(false);
+    setHasError(false);
+  }, [index]);
 
   const close = () => { setVisible(false); setTimeout(onClose, 300); };
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
@@ -300,16 +327,27 @@ function Lightbox({
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <img
-            key={index}
-            src={images[index].src}
-            alt={`Photo ${index + 1}`}
-            onLoad={() => setLoaded(true)}
-            decoding="async"
-            className="max-w-full max-h-[78dvh] md:max-h-[84dvh] object-contain rounded-2xl border border-gold/25 shadow-gold select-none"
-            style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
-            draggable={false}
-          />
+          {hasError ? (
+            <div className="flex h-[52dvh] w-[min(82vw,900px)] items-center justify-center rounded-2xl border border-gold/25 bg-[#080704] text-xs font-bold uppercase tracking-[0.28em] text-gold/70">
+              Photo indisponible
+            </div>
+          ) : (
+            <img
+              key={index}
+              src={images[index].src}
+              alt={`Photo ${index + 1}`}
+              loading="lazy"
+              onLoad={() => setLoaded(true)}
+              onError={() => {
+                setHasError(true);
+                setLoaded(true);
+              }}
+              decoding="async"
+              className="max-w-full max-h-[78dvh] md:max-h-[84dvh] object-contain rounded-2xl border border-gold/25 shadow-gold select-none"
+              style={{ opacity: loaded ? 1 : 0, transition: "opacity 300ms ease" }}
+              draggable={false}
+            />
+          )}
         </div>
       </div>
 

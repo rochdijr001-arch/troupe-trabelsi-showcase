@@ -515,23 +515,34 @@ function ServiceGalleryLightbox({
 
 function LightboxImage({ src, alt }: { src: string; alt: string }) {
   const [hasError, setHasError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setHasError(false);
+    setLoaded(false);
   }, [src]);
 
   return (
     <div className="relative flex min-h-[46dvh] w-full items-center justify-center overflow-hidden rounded-3xl border border-gold/25 bg-black/60 shadow-gold md:min-h-[62dvh]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.14),transparent_42%)]" />
+      {!loaded && !hasError && (
+        <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,0,0,0.08),rgba(212,175,55,0.04))]" />
+      )}
 
       {!hasError && src ? (
         <img
           key={src}
           src={src}
           alt={alt}
-          onError={() => setHasError(true)}
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setHasError(true);
+            setLoaded(true);
+          }}
           decoding="async"
           className="relative z-10 max-h-[72dvh] w-full object-contain md:max-h-[80dvh]"
+          style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
           draggable={false}
         />
       ) : (
