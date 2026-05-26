@@ -14,11 +14,14 @@ type GalleryImage = {
 };
 
 const SPANS: GalleryImage["span"][] = ["tall", "normal", "normal", "normal", "tall", "normal", "normal", "wide", "normal", "tall"];
+const MISSING_GALLERY_IMAGE_NUMBERS = [32, 39, 40, 45, 67];
 
-const galleryImages: GalleryImage[] = Array.from({ length: 77 }, (_, i) => ({
-  src: `/photo/image${String(i + 1).padStart(5, "0")}.jpeg`,
-  span: SPANS[i % SPANS.length],
-}));
+const galleryImages: GalleryImage[] = Array.from({ length: 77 }, (_, i) => i + 1)
+  .filter((imageNumber) => !MISSING_GALLERY_IMAGE_NUMBERS.includes(imageNumber))
+  .map((imageNumber, index) => ({
+    src: `/photo/image${String(imageNumber).padStart(5, "0")}.jpeg`,
+    span: SPANS[index % SPANS.length],
+  }));
 
 const INITIAL_VISIBLE_IMAGES = 16;
 const LOAD_MORE_IMAGES = 12;

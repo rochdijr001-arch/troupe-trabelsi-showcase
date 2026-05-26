@@ -30,19 +30,46 @@ type Service = {
   images: string[];
 };
 
-const makeWeddingPlannerImages = (folder: string, count: number) =>
-  Array.from(
-    { length: count },
-    (_, index) => `/wedding-planner/${folder}/image${String(index + 1).padStart(5, "0")}.jpeg`,
+const makeWeddingPlannerImages = (folder: string, imageNames: string[]) =>
+  imageNames.map((imageName) => `/wedding-planner/${folder}/${imageName}.jpeg`);
+
+const makeSequentialWeddingPlannerImages = (folder: string, count: number) =>
+  makeWeddingPlannerImages(
+    folder,
+    Array.from({ length: count }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
   );
 
-const voitureImages = makeWeddingPlannerImages("voiture", 13);
-const decorationImages = makeWeddingPlannerImages("decoration", 28);
-const dessertImages = makeWeddingPlannerImages("dessert", 26);
-const saleJusSucreImages = makeWeddingPlannerImages("sale-jus-sucre", 37);
+const voitureImages = makeWeddingPlannerImages("voiture", [
+  "image00001",
+  "image00003",
+  "image00004",
+  "image00005",
+  "image00006",
+  "image00007",
+  "image00008",
+  "image00009",
+  "image00010",
+  "image00011",
+  "image00012",
+  "image00013",
+  "image000015",
+]);
+const decorationImages = makeWeddingPlannerImages("decoration", [
+  ...Array.from({ length: 4 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
+  ...Array.from({ length: 16 }, (_, index) => `image${String(index + 6).padStart(5, "0")}`),
+  ...Array.from({ length: 6 }, (_, index) => `image${String(index + 23).padStart(5, "0")}`),
+]);
+const dessertImages = makeWeddingPlannerImages("dessert", [
+  ...Array.from({ length: 24 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
+  "image00026",
+]);
+const saleJusSucreImages = makeSequentialWeddingPlannerImages("sale-jus-sucre", 37);
 const soireePriveeEtCeremonieImages = makeWeddingPlannerImages(
   "soiree-privee%20et%20ceremonie",
-  13,
+  [
+    ...Array.from({ length: 4 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
+    ...Array.from({ length: 11 }, (_, index) => `image${String(index + 6).padStart(5, "0")}`),
+  ],
 );
 
 const services: Service[] = [
@@ -63,7 +90,7 @@ const services: Service[] = [
   },
   {
     title: "Wedding dessert",
-    description: "Buffet dessert élégant, gâteaux, mini douceurs et présentation premium.",
+    description: "Buffet traiteur élégant : gâteaux, mini douceurs et présentation premium.",
     icon: CakeSlice,
     cardImage: dessertImages[0],
     images: dessertImages,
@@ -127,7 +154,7 @@ function HeroSection() {
       className="relative flex min-h-[86vh] items-center overflow-hidden pt-32 pb-20"
     >
       <img
-        src="/photo/image00010.jpeg"
+        src="/wedding-planner/hero-bg.jpg"
         alt="Organisation premium de mariage par Troupe Trabelsi"
         fetchPriority="high"
         decoding="async"

@@ -51,7 +51,7 @@ const JOY_PACKS: Pack[] = [
   {
     tier: "bronze", name: "BRONZE", price: "3 500 DT",
     tagline: "L'énergie d'un live band", badge: null,
-    features: ["Joy live band","07 musiciens","02 chanteurs","Intro violoniste","Décoration lumière"],
+    features: ["Joy live band","07 musiciens","03 chanteurs","Intro mp3","Décoration lumière"],
   },
   {
     tier: "silver", name: "SILVER", price: "4 000 DT",
@@ -89,7 +89,7 @@ const TROUPE_PACKS: Pack[] = [
   {
     tier: "diamant", name: "DIAMANT", price: "6 500 DT",
     tagline: "L'expérience absolue", badge: "EXCLUSIF",
-    features: ["13 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziyara","Décoration lumière","Etincelle","Partie DJ","Extra : Voiture de luxe (600 DT)","Extra : Cortège & Salle de fête","Extra : Shooting (200 DT)"],
+    features: ["13 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziyara","Décoration lumière","Etincelle","Partie DJ","Extra : Voiture de luxe (à partir de 600 DT)","Extra : Cortège & Salle de fête","Extra : Shooting (200 DT)"],
   },
 ];
 
