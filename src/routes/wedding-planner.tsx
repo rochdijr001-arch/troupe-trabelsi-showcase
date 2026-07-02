@@ -33,19 +33,23 @@ const makeSequentialWeddingPlannerImages = (folder: string, count: number) =>
   );
 
 const voitureImages = makeWeddingPlannerImages("voiture", [
-  "image00001",
-  "image00003",
-  "image00004",
-  "image00005",
-  "image00006",
-  "image00007",
-  "image00008",
-  "image00009",
-  "image00010",
-  "image00011",
-  "image00012",
-  "image00013",
-  "image000015",
+  "pdp",
+  "WhatsApp Image 2026-06-28 at 2.38.02 PM",
+  "WhatsApp Image 2026-07-02 at 11.54.46 PM (1)",
+  "WhatsApp Image 2026-07-02 at 11.54.46 PM",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (1)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (2)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (3)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (4)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (5)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (6)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM (7)",
+  "WhatsApp Image 2026-07-02 at 11.54.47 PM",
+  "WhatsApp Image 2026-07-02 at 11.54.48 PM (1)",
+  "WhatsApp Image 2026-07-02 at 11.54.48 PM (2)",
+  "WhatsApp Image 2026-07-02 at 11.54.48 PM (3)",
+  "WhatsApp Image 2026-07-02 at 11.54.48 PM (4)",
+  "WhatsApp Image 2026-07-02 at 11.54.48 PM",
 ]);
 const decorationImages = makeWeddingPlannerImages("decoration", [
   ...Array.from({ length: 4 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
@@ -56,7 +60,22 @@ const dessertImages = makeWeddingPlannerImages("dessert", [
   ...Array.from({ length: 24 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
   "image00026",
 ]);
-const saleJusSucreImages = makeSequentialWeddingPlannerImages("sale-jus-sucre", 37);
+const saleJusSucreImages = makeWeddingPlannerImages("sale-jus-sucre", [
+  "WhatsApp Image 2026-07-03 at 12.03.05 AM",
+  "WhatsApp Image 2026-07-03 at 12.03.06 AM",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM (1)",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM (2)",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM (3)",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM (4)",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM (5)",
+  "WhatsApp Image 2026-07-03 at 12.03.07 AM",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM (1)",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM (2)",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM (3)",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM (4)",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM (5)",
+  "WhatsApp Image 2026-07-03 at 12.03.08 AM",
+]);
 const soireePriveeEtCeremonieImages = makeWeddingPlannerImages(
   "soiree-privee%20et%20ceremonie",
   [
@@ -469,7 +488,7 @@ function ServiceGalleryLightbox({
         </span>
       </div>
 
-      <div className="relative z-[10000] flex min-h-0 flex-1 items-center justify-center px-4 pb-7 sm:px-16">
+      <div className="relative z-[10000] flex min-h-0 flex-1 items-center justify-center px-0 pb-0 sm:px-6 sm:pb-6">
         <button
           type="button"
           onClick={(event) => {
@@ -483,7 +502,7 @@ function ServiceGalleryLightbox({
         </button>
 
         <div
-          className="relative flex w-full max-w-6xl items-center justify-center"
+          className="relative flex h-full min-h-0 w-full items-center justify-center"
           onClick={(event) => event.stopPropagation()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -523,10 +542,10 @@ function LightboxImage({ src, alt }: { src: string; alt: string }) {
   }, [src]);
 
   return (
-    <div className="relative flex min-h-[46dvh] w-full items-center justify-center overflow-hidden rounded-3xl border border-gold/25 bg-black/60 shadow-gold md:min-h-[62dvh]">
+    <div className="relative flex h-full min-h-[52dvh] w-full items-center justify-center overflow-hidden rounded-none border-y border-gold/25 bg-transparent shadow-gold sm:rounded-3xl sm:border md:min-h-[68dvh]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.14),transparent_42%)]" />
       {!loaded && !hasError && (
-        <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,0,0,0.08),rgba(212,175,55,0.04))]" />
+        <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(255,255,255,0.03),rgba(212,175,55,0.04))]" />
       )}
 
       {!hasError && src ? (
@@ -541,7 +560,7 @@ function LightboxImage({ src, alt }: { src: string; alt: string }) {
             setLoaded(true);
           }}
           decoding="async"
-          className="relative z-10 max-h-[72dvh] w-full object-contain md:max-h-[80dvh]"
+          className="absolute inset-0 z-10 block h-full w-full object-cover"
           style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
           draggable={false}
         />
