@@ -8,6 +8,7 @@ import {
   MessageCircle,
   Sparkles,
   X,
+  ZoomIn,
 } from "lucide-react";
 
 import { Footer } from "@/components/site/Footer";
@@ -227,29 +228,14 @@ function HeroSection() {
 
 function ServicesSection() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const openServiceGallery = (service: Service) => {
     setSelectedService(service);
-    setLightboxIndex(0);
   };
 
-  const closeLightbox = useCallback(() => {
+  const closeAlbum = () => {
     setSelectedService(null);
-    setLightboxIndex(0);
-  }, []);
-
-  const goNext = useCallback(() => {
-    if (!selectedService) return;
-    setLightboxIndex((current) => (current + 1) % selectedService.images.length);
-  }, [selectedService]);
-
-  const goPrev = useCallback(() => {
-    if (!selectedService) return;
-    setLightboxIndex(
-      (current) => (current - 1 + selectedService.images.length) % selectedService.images.length,
-    );
-  }, [selectedService]);
+  };
 
   return (
     <section id="services" className="relative overflow-hidden py-20 md:py-28">
@@ -278,13 +264,7 @@ function ServicesSection() {
       </div>
 
       {selectedService && (
-        <ServiceGalleryLightbox
-          service={selectedService}
-          index={lightboxIndex}
-          onClose={closeLightbox}
-          onNext={goNext}
-          onPrev={goPrev}
-        />
+        <ServiceAlbumOverlay service={selectedService} onClose={closeAlbum} />
       )}
     </section>
   );
@@ -388,34 +368,45 @@ function ServiceCardBackground({
   );
 }
 
-function ServiceGalleryLightbox({
+function ServiceAlbumOverlay({
   service,
-  index,
   onClose,
-  onNext,
-  onPrev,
 }: {
   service: Service;
-  index: number;
   onClose: () => void;
-  onNext: () => void;
-  onPrev: () => void;
 }) {
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const currentImage = service.images[index] ?? service.images[0] ?? "";
-  const totalImages = service.images.length;
+  const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
+
+  const goNext = useCallback(() => {
+    setZoomedIndex((current) =>
+      current === null ? null : (current + 1) % service.images.length,
+    );
+  }, [service.images.length]);
+
+  const goPrev = useCallback(() => {
+    setZoomedIndex((current) =>
+      current === null ? null : (current - 1 + service.images.length) % service.images.length,
+    );
+  }, [service.images.length]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-      if (event.key === "ArrowLeft") onPrev();
-      if (event.key === "ArrowRight") onNext();
+      if (event.key === "Escape") {
+        if (zoomedIndex !== null) {
+          setZoomedIndex(null);
+        } else {
+          onClose();
+        }
+      }
+      if (zoomedIndex !== null) {
+        if (event.key === "ArrowRight") goNext();
+        if (event.key === "ArrowLeft") goPrev();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, onNext, onPrev]);
+  }, [onClose, zoomedIndex, goNext, goPrev]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -425,6 +416,173 @@ function ServiceGalleryLightbox({
       document.body.style.overflow = previousOverflow;
     };
   }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex h-[100dvh] flex-col overflow-hidden bg-[#030303]/96 text-white backdrop-blur-md md:backdrop-blur-2xl"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Album ${service.title}`}
+    >
+      <div className="pointer-events-none absolute -left-28 top-16 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-gold/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+
+      <button
+        type="button"
+        onClick={(event) => {
+          event.stopPropagation();
+          onClose();
+        }}
+        aria-label="Fermer l'album"
+        className="absolute right-4 top-4 z-[10010] flex h-11 w-11 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:right-6 sm:top-6"
+      >
+        <X size={18} />
+      </button>
+
+      <div className="relative z-[10000] flex shrink-0 items-center justify-between gap-4 px-4 pb-4 pr-20 pt-5 sm:px-8 sm:pt-7">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold">
+            Service Premium
+          </p>
+          <h3 className="mt-2 font-display text-2xl text-white sm:text-4xl">{service.title}</h3>
+        </div>
+        <span className="hidden rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold tracking-[0.2em] text-gold sm:inline-flex">
+          {service.images.length} photos
+        </span>
+      </div>
+
+      <div
+        className="relative z-[10000] min-h-0 flex-1 overflow-y-auto px-4 pb-8 sm:px-8"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {service.images.map((src, idx) => (
+            <AlbumTile
+              key={src}
+              src={src}
+              alt={service.title}
+              idx={idx}
+              onOpen={() => setZoomedIndex(idx)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {zoomedIndex !== null && (
+        <ZoomedImage
+          images={service.images}
+          index={zoomedIndex}
+          alt={service.title}
+          onClose={() => setZoomedIndex(null)}
+          onNext={goNext}
+          onPrev={goPrev}
+        />
+      )}
+    </div>
+  );
+}
+
+function AlbumTile({
+  src,
+  alt,
+  idx,
+  onOpen,
+}: {
+  src: string;
+  alt: string;
+  idx: number;
+  onOpen: () => void;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div
+      className="group relative aspect-[4/5] cursor-pointer overflow-hidden rounded-2xl border border-gold/20"
+      onClick={(event) => {
+        event.stopPropagation();
+        onOpen();
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Voir la photo ${idx + 1}`}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onOpen();
+        }
+      }}
+      style={{ animationDelay: `${(idx % 8) * 0.06}s` }}
+    >
+      <div className="relative h-full w-full overflow-hidden bg-[#080704]">
+        {!loaded && !hasError && (
+          <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,0,0,0.08),rgba(212,175,55,0.04))]" />
+        )}
+
+        {hasError ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#080704] text-[10px] font-bold uppercase tracking-[0.24em] text-gold/70">
+            Photo
+          </div>
+        ) : (
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={() => {
+              setHasError(true);
+              setLoaded(true);
+            }}
+            className="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
+            style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
+          />
+        )}
+      </div>
+
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/85 via-[#0a0a0a]/20 to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
+
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+        style={{ boxShadow: "inset 0 0 0 1.5px #D4AF37" }}
+      />
+
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-gold/70 bg-[#0a0a0a]/60 backdrop-blur transition-transform duration-300 ease-out group-hover:scale-110">
+          <ZoomIn size={18} className="text-gold" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ZoomedImage({
+  images,
+  index,
+  alt,
+  onClose,
+  onNext,
+  onPrev,
+}: {
+  images: string[];
+  index: number;
+  alt: string;
+  onClose: () => void;
+  onNext: () => void;
+  onPrev: () => void;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const src = images[index] ?? "";
+
+  useEffect(() => {
+    setLoaded(false);
+    setHasError(false);
+  }, [src]);
 
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
     const touch = event.touches[0];
@@ -454,124 +612,89 @@ function ServiceGalleryLightbox({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex h-[100dvh] flex-col overflow-hidden bg-[#030303]/96 text-white backdrop-blur-md md:backdrop-blur-2xl"
+      className="fixed inset-0 z-[10050] flex items-center justify-center bg-[#030303]/96 p-4 backdrop-blur-md sm:p-8"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={`Galerie ${service.title}`}
+      aria-label={alt}
     >
-      <div className="pointer-events-none absolute -left-28 top-16 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-gold/10 blur-3xl" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
-
       <button
         type="button"
         onClick={(event) => {
           event.stopPropagation();
           onClose();
         }}
-        aria-label="Fermer la galerie"
-        className="absolute right-4 top-4 z-[10010] flex h-11 w-11 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:right-6 sm:top-6"
+        aria-label="Fermer la photo"
+        className="absolute right-4 top-4 z-[10060] flex h-11 w-11 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:right-6 sm:top-6"
       >
         <X size={18} />
       </button>
 
-      <div className="relative z-[10000] flex shrink-0 items-center justify-between gap-4 px-4 pb-4 pr-20 pt-5 sm:px-8 sm:pt-7">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold">
-            Service Premium
-          </p>
-          <h3 className="mt-2 font-display text-2xl text-white sm:text-4xl">{service.title}</h3>
-        </div>
-        <span className="hidden rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold tracking-[0.2em] text-gold sm:inline-flex">
-          {index + 1} / {totalImages}
+      {images.length > 1 && (
+        <span className="absolute left-1/2 top-4 z-[10060] -translate-x-1/2 rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold tracking-[0.2em] text-gold sm:top-6">
+          {index + 1} / {images.length}
         </span>
-      </div>
+      )}
 
-      <div className="relative z-[10000] flex min-h-0 flex-1 items-center justify-center px-0 pb-0 sm:px-6 sm:pb-6">
+      {images.length > 1 && (
         <button
           type="button"
           onClick={(event) => {
             event.stopPropagation();
             onPrev();
           }}
-          aria-label="Image précédente"
-          className="absolute left-3 top-1/2 z-[10010] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:left-6 sm:h-14 sm:w-14"
+          aria-label="Photo précédente"
+          className="absolute left-3 top-1/2 z-[10060] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:left-6 sm:h-14 sm:w-14"
         >
           <ChevronLeft size={22} />
         </button>
+      )}
 
-        <div
-          className="relative flex h-full min-h-0 w-full items-center justify-center"
-          onClick={(event) => event.stopPropagation()}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <LightboxImage src={currentImage} alt={service.title} />
-        </div>
+      <div
+        className="relative flex max-h-full max-w-full items-center justify-center"
+        onClick={(event) => event.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {!loaded && !hasError && (
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-gold/30 border-t-gold" />
+        )}
 
+        {hasError ? (
+          <div className="flex h-[40vh] w-[min(82vw,900px)] items-center justify-center rounded-2xl border border-gold/25 bg-[#080704] text-xs font-bold uppercase tracking-[0.28em] text-gold/70">
+            Photo indisponible
+          </div>
+        ) : (
+          <img
+            key={src}
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={() => {
+              setHasError(true);
+              setLoaded(true);
+            }}
+            className="max-h-[88vh] max-w-full rounded-2xl border border-gold/25 object-contain shadow-gold"
+            style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
+            draggable={false}
+          />
+        )}
+      </div>
+
+      {images.length > 1 && (
         <button
           type="button"
           onClick={(event) => {
             event.stopPropagation();
             onNext();
           }}
-          aria-label="Image suivante"
-          className="absolute right-3 top-1/2 z-[10010] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:right-6 sm:h-14 sm:w-14"
+          aria-label="Photo suivante"
+          className="absolute right-3 top-1/2 z-[10060] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gold/45 bg-black/80 text-gold shadow-gold transition-all duration-300 hover:bg-gradient-gold hover:text-primary-foreground sm:right-6 sm:h-14 sm:w-14"
         >
           <ChevronRight size={22} />
         </button>
-      </div>
-
-      <div className="relative z-[10000] flex shrink-0 justify-center px-4 pb-5 sm:hidden">
-        <span className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold tracking-[0.2em] text-gold">
-          {index + 1} / {totalImages}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function LightboxImage({ src, alt }: { src: string; alt: string }) {
-  const [hasError, setHasError] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setHasError(false);
-    setLoaded(false);
-  }, [src]);
-
-  return (
-    <div className="relative flex h-full min-h-[52dvh] w-full items-center justify-center overflow-hidden rounded-none border-y border-gold/25 bg-transparent shadow-gold sm:rounded-3xl sm:border md:min-h-[68dvh]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.14),transparent_42%)]" />
-      {!loaded && !hasError && (
-        <div className="absolute inset-0 border border-gold/10 bg-[linear-gradient(135deg,rgba(212,175,55,0.08),rgba(255,255,255,0.03),rgba(212,175,55,0.04))]" />
-      )}
-
-      {!hasError && src ? (
-        <img
-          key={src}
-          src={src}
-          alt={alt}
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          onError={() => {
-            setHasError(true);
-            setLoaded(true);
-          }}
-          decoding="async"
-          className="absolute inset-0 z-10 block h-full w-full object-cover"
-          style={{ opacity: loaded ? 1 : 0, transition: "opacity 260ms ease" }}
-          draggable={false}
-        />
-      ) : (
-        <div className="relative z-10 flex min-h-[46dvh] w-full flex-col items-center justify-center px-8 text-center md:min-h-[62dvh]">
-          <Sparkles size={24} className="text-gold" strokeWidth={1.5} />
-          <p className="mt-4 font-display text-2xl text-white">{alt}</p>
-          <p className="mt-3 max-w-md text-sm leading-7 text-foreground/55">
-            Cette image sera affichée dès qu'elle sera disponible dans le dossier public.
-          </p>
-        </div>
       )}
     </div>
   );

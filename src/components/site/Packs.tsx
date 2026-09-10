@@ -49,24 +49,24 @@ const TROUPE_VIDEOS: VideoItem[] = [
 
 const JOY_PACKS: Pack[] = [
   {
-    tier: "bronze", name: "BRONZE", price: "3 500 DT",
+    tier: "bronze", name: "BRONZE", price: "3 700 DT",
     tagline: "L'énergie d'un live band", badge: null,
-    features: ["Joy live band","07 musiciens","03 chanteurs","Intro mp3","Décoration lumière"],
+    features: ["Joy live band","07 musiciens","03 chanteurs","Intro mp3","Spectacle Nouba","Spectacle Hadhra","Décoration lumière"],
   },
   {
-    tier: "silver", name: "SILVER", price: "4 000 DT",
+    tier: "silver", name: "SILVER", price: "4 200 DT",
     tagline: "Une nuit d'exception", badge: null,
-    features: ["Joy live band","07 musiciens","03 chanteurs","Intro violoniste","Spectacle Nouba","Spectacle Hadhra","Décoration lumière"],
+    features: ["Joy live band","07 musiciens","03 chanteurs","Intro mp3","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziara","Décoration lumière"],
   },
   {
     tier: "gold", name: "GOLD", price: "4 600 DT",
     tagline: "Le plus populaire", badge: "LE PLUS CHOISI",
-    features: ["Joy live band","07 musiciens","03 chanteurs","Intro violoniste","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziara","Décoration lumière"],
+    features: ["Joy live band","07 musiciens","03 chanteurs","Intro mp3","Spectacle Nouba","Spectacle Hadhra","Dabka Souriya","Décoration lumière"],
   },
   {
-    tier: "diamant", name: "DIAMANT", price: "5 200 DT",
+    tier: "diamant", name: "DIAMANT", price: "5 300 DT",
     tagline: "L'expérience absolue", badge: null,
-    features: ["Joy live band","07 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziara","Décoration lumière"],
+    features: ["Joy live band","07 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziara","Décoration lumière","Etincelle","Partie DJ","Extra : Voiture de luxe (à partir de 600 DT)","Extra : Shooting (200 DT)"],
   },
 ];
 
@@ -79,17 +79,17 @@ const TROUPE_PACKS: Pack[] = [
   {
     tier: "silver", name: "SILVER", price: "5 200 DT",
     tagline: "Une nuit d'exception", badge: null,
-    features: ["13 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Hadhra","Décoration lumière"],
+    features: ["13 musiciens","03 chanteurs","Intro violoniste","Spectacle Nouba","Spectacle Ziyara","Spectacle Hadhra","Décoration lumière"],
   },
   {
     tier: "gold", name: "GOLD", price: "5 500 DT",
     tagline: "Le plus demandé", badge: "LE PLUS CHOISI",
-    features: ["13 musiciens","03 chanteurs","Intro violoniste","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziyara","Décoration lumière"],
+    features: ["13 musiciens","03 chanteurs","Intro violoniste","Spectacle Nouba","Spectacle Hadhra","Dabka Souriya","Décoration lumière","Machine à bulles"],
   },
   {
     tier: "diamant", name: "DIAMANT", price: "6 500 DT",
     tagline: "L'expérience absolue", badge: "EXCLUSIF",
-    features: ["13 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziyara","Décoration lumière","Etincelle","Partie DJ","Extra : Voiture de luxe (à partir de 600 DT)","Extra : Cortège & Salle de fête","Extra : Shooting (200 DT)"],
+    features: ["13 musiciens","03 chanteurs","Intro violoniste","Dabka Souriya","Spectacle Nouba","Spectacle Hadhra","Spectacle Ziyara","Décoration lumière","Etincelle","Partie DJ","Extra : Voiture de luxe (à partir de 600 DT)","Extra : Shooting (200 DT)","Machine à bulles"],
   },
 ];
 
@@ -640,7 +640,7 @@ export function Packs() {
             isActive={active === "joy"}
             logoSrc="/joybandlogo.png"
             label="JOY BAND"
-            sub="À partir de 3 500 DT"
+            sub="À partir de 3 700 DT"
             onClick={() => switchTab("joy")}
           />
         </div>
