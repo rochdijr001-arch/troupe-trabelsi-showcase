@@ -33,11 +33,21 @@ const makeSequentialWeddingPlannerImages = (folder: string, count: number) =>
     Array.from({ length: count }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
   );
 
+/** A photo renamed "PP" (any extension) is the highlight's designated cover; otherwise keep the existing fallback. */
+const findCoverImage = (images: string[], fallback: string) => {
+  const ppImage = images.find((src) => {
+    const filename = src.split("/").pop() ?? "";
+    const baseName = filename.replace(/\.[^./]+$/, "");
+    return baseName.toLowerCase() === "pp";
+  });
+
+  return ppImage ?? fallback;
+};
+
 const voitureImages = makeWeddingPlannerImages("voiture", [
   "pdp",
   "WhatsApp Image 2026-06-28 at 2.38.02 PM",
   "WhatsApp Image 2026-07-02 at 11.54.46 PM (1)",
-  "WhatsApp Image 2026-07-02 at 11.54.46 PM",
   "WhatsApp Image 2026-07-02 at 11.54.47 PM (1)",
   "WhatsApp Image 2026-07-02 at 11.54.47 PM (2)",
   "WhatsApp Image 2026-07-02 at 11.54.47 PM (3)",
@@ -46,16 +56,22 @@ const voitureImages = makeWeddingPlannerImages("voiture", [
   "WhatsApp Image 2026-07-02 at 11.54.47 PM (6)",
   "WhatsApp Image 2026-07-02 at 11.54.47 PM (7)",
   "WhatsApp Image 2026-07-02 at 11.54.47 PM",
-  "WhatsApp Image 2026-07-02 at 11.54.48 PM (1)",
   "WhatsApp Image 2026-07-02 at 11.54.48 PM (2)",
   "WhatsApp Image 2026-07-02 at 11.54.48 PM (3)",
   "WhatsApp Image 2026-07-02 at 11.54.48 PM (4)",
   "WhatsApp Image 2026-07-02 at 11.54.48 PM",
+  "WhatsApp Image 2026-09-08 at 3.34.07 PM",
+  "WhatsApp Image 2026-09-08 at 3.34.18 PM",
 ]);
 const decorationImages = makeWeddingPlannerImages("decoration", [
+  "PP",
+  "WhatsApp Image 2026-09-08 at 3.34.08 PM",
+  "WhatsApp Image 2026-09-08 at 3.34.10 PM",
+  "WhatsApp Image 2026-09-08 at 3.34.12 PM",
   ...Array.from({ length: 4 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
   ...Array.from({ length: 16 }, (_, index) => `image${String(index + 6).padStart(5, "0")}`),
-  ...Array.from({ length: 6 }, (_, index) => `image${String(index + 23).padStart(5, "0")}`),
+  ...Array.from({ length: 3 }, (_, index) => `image${String(index + 23).padStart(5, "0")}`),
+  ...Array.from({ length: 2 }, (_, index) => `image${String(index + 27).padStart(5, "0")}`),
 ]);
 const dessertImages = makeWeddingPlannerImages("dessert", [
   ...Array.from({ length: 24 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
@@ -80,8 +96,10 @@ const saleJusSucreImages = makeWeddingPlannerImages("sale-jus-sucre", [
 const soireePriveeEtCeremonieImages = makeWeddingPlannerImages(
   "soiree-privee%20et%20ceremonie",
   [
+    "PP",
     ...Array.from({ length: 4 }, (_, index) => `image${String(index + 1).padStart(5, "0")}`),
-    ...Array.from({ length: 11 }, (_, index) => `image${String(index + 6).padStart(5, "0")}`),
+    ...Array.from({ length: 8 }, (_, index) => `image${String(index + 6).padStart(5, "0")}`),
+    ...Array.from({ length: 2 }, (_, index) => `image${String(index + 15).padStart(5, "0")}`),
   ],
 );
 
@@ -89,31 +107,31 @@ const services: Service[] = [
   {
     title: "Voiture de luxe",
     description: "Voiture de luxe au choix avec chauffeur.",
-    cardImage: voitureImages[0],
+    cardImage: findCoverImage(voitureImages, voitureImages[0]),
     images: voitureImages,
   },
   {
     title: "Décoration mariage",
     description: "Décoration florale, lumières et ambiance sur mesure.",
-    cardImage: decorationImages[0],
+    cardImage: findCoverImage(decorationImages, decorationImages[0]),
     images: decorationImages,
   },
   {
     title: "Wedding dessert",
     description: "Buffet dessert élégant et présentation premium.",
-    cardImage: dessertImages[0],
+    cardImage: findCoverImage(dessertImages, dessertImages[0]),
     images: dessertImages,
   },
   {
     title: "Salé, jus & sucré",
     description: "Salé, jus frais, sucré et service raffiné.",
-    cardImage: saleJusSucreImages[0],
+    cardImage: findCoverImage(saleJusSucreImages, saleJusSucreImages[0]),
     images: saleJusSucreImages,
   },
   {
     title: "Soirée privée et cérémonie",
     description: "Organisation complète pour vos événements privés.",
-    cardImage: soireePriveeEtCeremonieImages[0],
+    cardImage: findCoverImage(soireePriveeEtCeremonieImages, soireePriveeEtCeremonieImages[0]),
     images: soireePriveeEtCeremonieImages,
   },
 ];
